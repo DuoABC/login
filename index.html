@@ -52,10 +52,21 @@
         .input-group input.error {
             border-color: red;
         }
+        .input-group input.error-pass {
+            border-color: red;
+        }
         .input-group .tooltip {
             color: rgb(224, 58, 58);
             padding: 5px;
             display: none;
+        }
+        .input-group .error-pass {
+            color: rgb(224, 58, 58);
+            padding: 5px;
+            display: none;
+        }
+        .input-group .error-pass {
+            display: flex;
         }
         .input-group input.error + .tooltip {
             display: flex;
@@ -111,8 +122,9 @@
             </div>
             <div class="input-group">
                 <label for="audience">Tên đăng nhập</label>
-                <input type="text" id="audience" placeholder>
+                <input type="password" id="audience" placeholder>
                 <div class="tooltip">Vui lòng nhập tên đăng nhập!</div>
+                <div class="error-pass">Sai tên đăng nhập!</div>
             </div>
             <button class="submit-btn"
                 style="display: flex; justify-content: center; gap: 0.5em "
@@ -187,7 +199,7 @@
             window.location.href = "choice.html";
         })
         .catch((error) => {
-            console.log(error);
+            inputField.classList.add("error-pass");
             alert("Error during login!");
         });
     }
