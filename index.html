@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login Page</title>
+        <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f0f4f8;
+            background: #e9c4e1;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -29,6 +29,7 @@
         }
         .input-group {
             margin-bottom: 15px;
+            position: relative;
         }
         .input-group label {
             display: block;
@@ -36,16 +37,28 @@
             color: #555;
         }
         .input-group input {
-            width: 100%;
+            width: 94%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
             color: #555;
+            transition: border-color 0.3s;
         }
         .input-group input:focus {
             border-color: #007bff;
             outline: none;
+        }
+        .input-group input.error {
+            border-color: red;
+        }
+        .input-group .tooltip {
+            color: rgb(224, 58, 58);
+            padding: 5px;
+            display: none;
+        }
+        .input-group input.error + .tooltip {
+            display: flex;
         }
         .submit-btn {
             width: 100%;
@@ -61,57 +74,93 @@
             background: #0056b3;
         }
     </style>
-</head>
-<body>
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>Login</h1>
+            <div class="input-group">
+                <label for="audience">Tên đăng nhập</label>
+                <input type="text" id="audience" placeholder>
+                <div class="tooltip">Vui lòng nhập tên đăng nhập!</div>
+            </div>
+            <button class="submit-btn"
+                style="display: flex; justify-content: center; gap: 0.5em "
+                onclick="submitLogin()">Login <svg
+                    fill="#000000" height="20px" width="20px" version="1.1"
+                    id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 0 499.1 499.1" xml:space="preserve"><g
+                        id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+                        id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                        stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
+                        <g> <g> <g> <path
+                                        d="M0,249.6c0,9.5,7.7,17.2,17.2,17.2h327.6l-63.9,63.8c-6.7,6.7-6.7,17.6,0,24.3c3.3,3.3,7.7,5,12.1,5s8.8-1.7,12.1-5 l93.1-93.1c6.7-6.7,6.7-17.6,0-24.3l-93.1-93.1c-6.7-6.7-17.6-6.7-24.3,0c-6.7,6.7-6.7,17.6,0,24.3l63.8,63.8H17.2 C7.7,232.5,0,240.1,0,249.6z"></path>
+                                    <path
+                                        d="M396.4,494.2c56.7,0,102.7-46.1,102.7-102.8V107.7C499.1,51,453,4.9,396.4,4.9H112.7C56,4.9,10,51,10,107.7V166 c0,9.5,7.7,17.1,17.1,17.1c9.5,0,17.2-7.7,17.2-17.1v-58.3c0-37.7,30.7-68.5,68.4-68.5h283.7c37.7,0,68.4,30.7,68.4,68.5v283.7 c0,37.7-30.7,68.5-68.4,68.5H112.7c-37.7,0-68.4-30.7-68.4-68.5v-57.6c0-9.5-7.7-17.2-17.2-17.2S10,324.3,10,333.8v57.6 c0,56.7,46.1,102.8,102.7,102.8H396.4L396.4,494.2z"></path>
+                                </g> </g> <g> </g> <g> </g> <g> </g> <g> </g>
+                            <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g>
+                            </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g>
+                        </g> </g></svg></button>
+        </div>
 
-<div class="login-container">
-    <h1>Login</h1>
-    <div class="input-group">
-        <label for="audience">Audience</label>
-        <input type="text" id="audience" placeholder="Enter audience">
-    </div>
-    <button class="submit-btn" onclick="submitLogin()">Login</button>
-</div>
+        <script
+            src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
+        </script>
+        <script>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-    function submitLogin() {
-        let audience = document.getElementById("audience").value;
+            document.getElementById("audience").addEventListener("input", function() {
+                let audience = document.getElementById("audience").value;
+                let inputField = document.getElementById("audience");
 
-        if (!audience) {
-            alert("Please enter audience!");
-            return;
-        }
+                if (audience) {
+                    // Nếu có giá trị, xóa lớp 'error' (nếu có)
+                    inputField.classList.remove("error");
+                } else {
+                    // Thêm lớp 'error' vào ô input nếu chưa nhập gì
+                    inputField.classList.add("error");
+                }
+            });
+            function submitLogin() {
+                let audience = document.getElementById("audience").value;
+                let inputField = document.getElementById("audience");
 
-        let data = JSON.stringify({
-            "client_id": "YFoJuJhzcdKPiv5bMk1ZZW33FhykPwrA",
-            "client_secret": "EIcnf88eef1dCjSOkZdnJunx6cmioWDCwOF9qwGGp7Zs8wFOZg2f2G3NCzYe70yN",
-            "audience": audience,
-            "grant_type": "client_credentials"
-        });
+                if (!audience) {
+                    // Thêm lớp 'error' vào ô input và hiển thị tooltip
+                    inputField.classList.add("error");
+                    return;
+                } else {
+                    // Nếu có giá trị, xóa lớp 'error' (nếu có)
+                    inputField.classList.remove("error");
+                }
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://duodev.us.auth0.com/oauth/token',
-            headers: { 
-                'content-type': 'application/json', 
-                'Cookie': 'did=s%3Av0%3A63b9988a-baaa-4841-bc63-77d6215902b3.3HatLRt%2BXvQApAt%2BktJkt8PrG6XaeNSQV94hVuepDq4; did_compat=s%3Av0%3A63b9988a-baaa-4841-bc63-77d6215902b3.3HatLRt%2BXvQApAt%2BktJkt8PrG6XaeNSQV94hVuepDq4'
-            },
-            data : data
-        };
+                let data = JSON.stringify({
+                    "client_id": "YFoJuJhzcdKPiv5bMk1ZZW33FhykPwrA",
+                    "client_secret": "EIcnf88eef1dCjSOkZdnJunx6cmioWDCwOF9qwGGp7Zs8wFOZg2f2G3NCzYe70yN",
+                    "audience": audience,
+                    "grant_type": "client_credentials"
+                });
+
+                let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: 'https://duodev.us.auth0.com/oauth/token',
+                    headers: { 
+                        'content-type': 'application/json', 
+                        'Cookie': 'did=s%3Av0%3A63b9988a-baaa-4841-bc63-77d6215902b3.3HatLRt%2BXvQApAt%2BktJkt8PrG6XaeNSQV94hVuepDq4; did_compat=s%3Av0%3A63b9988a-baaa-4841-bc63-77d6215902b3.3HatLRt%2BXvQApAt%2BktJkt8PrG6XaeNSQV94hVuepDq4'
+                    },
+                    data : data
+                };
 
         axios.request(config)
         .then((response) => {
-            console.log(JSON.stringify(response));
-            alert("Login successful!");
+            window.location.href = "choice.html";
         })
         .catch((error) => {
             console.log(error);
             alert("Error during login!");
         });
     }
-</script>
+        </script>
 
-</body>
+    </body>
 </html>
