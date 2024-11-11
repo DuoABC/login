@@ -1,116 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm" action="javascript:void(0);">
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="login-btn">Login</button>
-        </form>
-        <div id="error-message" class="error-message"></div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;  
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
-    .login-container {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 300px;
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .input-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    button {
-        width: 100%;
-        padding: 10px;
-        background-color: #4CAF50;
-        border: none;
-        border-radius: 5px;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-
-    .error-message {
-        color: red;
-        text-align: center;
-        margin-top: 10px;
-    }
-</style>
-<script>
-    document.getElementById('loginForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Ngừng reload trang khi submit form
-
-        // Lấy giá trị từ các input
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        // Kiểm tra thông tin đăng nhập (ví dụ đơn giản với username là "admin" và password là "12345")
-        if (username === "admin" && password === "12345") {
-            alert("Đăng nhập thành công!");
-            // Có thể chuyển hướng đến trang khác sau khi đăng nhập thành công
-            window.location.href = "home.html";  // Ví dụ chuyển hướng
-        } else {
-            document.getElementById('error-message').innerText = "Tên đăng nhập hoặc mật khẩu không đúng!";
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-    });
+        .login-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .login-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+        .input-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
 
+<div class="login-container">
+    <h1>Login</h1>
+    <div class="input-group">
+        <label for="audience">Audience</label>
+        <input type="text" id="audience" placeholder="Enter audience">
+    </div>
+    <button class="submit-btn" onclick="submitLogin()">Login</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function submitLogin() {
+        let audience = document.getElementById("audience").value;
+
+        if (!audience) {
+            alert("Please enter audience!");
+            return;
+        }
+
+        let data = JSON.stringify({
+            "client_id": "YFoJuJhzcdKPiv5bMk1ZZW33FhykPwrA",
+            "client_secret": "EIcnf88eef1dCjSOkZdnJunx6cmioWDCwOF9qwGGp7Zs8wFOZg2f2G3NCzYe70yN",
+            "audience": audience,
+            "grant_type": "client_credentials"
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://duodev.us.auth0.com/oauth/token',
+            headers: { 
+                'content-type': 'application/json', 
+                'Cookie': 'did=s%3Av0%3A63b9988a-baaa-4841-bc63-77d6215902b3.3HatLRt%2BXvQApAt%2BktJkt8PrG6XaeNSQV94hVuepDq4; did_compat=s%3Av0%3A63b9988a-baaa-4841-bc63-77d6215902b3.3HatLRt%2BXvQApAt%2BktJkt8PrG6XaeNSQV94hVuepDq4'
+            },
+            data : data
+        };
+
+        axios.request(config)
+        .then((response) => {
+            console.log(JSON.stringify(response));
+            alert("Login successful!");
+        })
+        .catch((error) => {
+            console.log(error);
+            alert("Error during login!");
+        });
+    }
 </script>
 
+</body>
 </html>
